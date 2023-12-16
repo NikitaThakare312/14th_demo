@@ -24,7 +24,47 @@ function createPost(post){
                 reject('Error: Somthing went wrong');
             }
         },2000);
+    })
+    .then(() => updateLastUserActivityTime(user))
+    .then((lastActivityTime) => {
+      user.lastActivityTime = lastActivityTime;
+      getPostsAndLastActivityTime(user);
+    })
+    .then(() => deleteLastPost(user))
+    .then((remainingPosts) => {
+      console.log('Remaining Posts after deletion:', remainingPosts);
+    })
+    .catch((error) => console.error(error));
+  }
+  
+  function updateLastUserActivityTime(user) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const updatedLastActivityTime = new Date();
+        resolve(updatedLastActivityTime);
+      }, 1000);
     });
+  }
+  
+  function deleteLastPost(user) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const deletedPost = posts.pop();
+        resolve(posts);
+      }, 1000);
+    });
+  }
+  
+  // Example usage
+  const user = {
+    id: 1,
+    name: 'John',
+    posts: [],
+    lastActivityTime: null
+  };
+  
+  createPost({ title: 'Post Three', body: 'This is post three' }, user);
+  
 
 }
 //createPost({title:'Post Three',body:'This is post three'})
